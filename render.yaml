@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: whot-table
+    runtime: node
+    plan: starter            # a persistent disk needs a paid plan
+    region: frankfurt        # closest Render region to Lagos
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.0
+      - key: NODE_ENV
+        value: production
+      - key: WHOT_DB_PATH
+        value: /var/data/whot.sqlite
+      - key: ADMIN_KEY
+        sync: false          # you type it in the Render dashboard
+    disk:
+      name: whot-data
+      mountPath: /var/data
+      sizeGB: 1

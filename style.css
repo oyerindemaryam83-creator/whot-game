@@ -1,0 +1,130 @@
+:root{--wine:#4a0d14;--deep:#26070b;--paper:#f1ece6;--gold:#e3b23c;--ink:#2b0a0e;--cw:clamp(52px,14vw,88px)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;color:var(--paper);font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.hidden{display:none!important}
+body.auth-required main,body.auth-required .wallet{display:none}
+.bar{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;align-items:center;padding:.7rem 1rem;background:var(--wine);position:sticky;top:0;z-index:5}
+.bar h1{margin:0;font:700 1.4rem Georgia,serif;letter-spacing:.02em}
+.wallet{display:flex;align-items:center;gap:.5rem}
+.chips{font-size:1.3rem;font-weight:700;color:var(--gold)}
+.unit{font-size:.8rem;opacity:.8;margin-right:.3rem}
+button{font:inherit;border:0;border-radius:6px;padding:.55rem 1rem;background:var(--gold);color:var(--ink);font-weight:700;cursor:pointer}
+button.ghost{background:transparent;color:var(--paper);border:1px solid #fff5}
+button.primary{background:var(--gold);padding:.8rem 1.4rem}
+button:focus-visible,.card:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{max-width:980px;margin:0 auto;padding:1rem}
+.panel{max-width:420px;margin:2rem auto;display:grid;gap:1rem}
+.panel h2{font:700 1.6rem Georgia,serif;margin:0}
+label{display:grid;gap:.3rem;font-size:.9rem}
+.check-row{display:flex;align-items:center;gap:.55rem}
+.check-row input{width:1rem;height:1rem;margin:0;accent-color:var(--gold)}
+input,select{font:inherit;padding:.6rem;border-radius:6px;border:1px solid #fff4;background:#fff1;color:var(--paper)}
+select option{color:#000}
+.note{font-size:.8rem;opacity:.75;line-height:1.4;margin:0}
+.opps{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.opp{padding:.5rem .9rem;border-radius:8px;background:#fff1;text-align:center;font-size:.85rem;min-width:90px}
+.opp.turn{outline:2px solid var(--gold)}
+.opp.self{border:1px solid #fff3}
+.seat-direction{display:inline-grid;place-items:center;width:1.2rem;height:1.2rem;margin-right:.35rem;border:1px solid #e3b23c99;border-radius:50%;color:var(--gold);font-size:.65rem;font-weight:800;vertical-align:middle}
+.last-card{display:block;margin-top:.3rem;color:var(--gold);font-size:.7rem;font-weight:800;animation:last-pop .55s ease-out}
+.draw-area{display:grid;justify-items:center;gap:.45rem}
+.draw-count{font-size:.78rem;font-weight:700;color:var(--gold);min-height:1em}
+#turnTimer{min-height:1.2em;color:var(--gold);font-size:.8rem;font-weight:700}
+#board{display:grid;grid-template-columns:minmax(92px,1fr) minmax(220px,2.4fr) minmax(92px,1fr);grid-template-rows:minmax(54px,auto) minmax(190px,1fr) minmax(54px,auto);grid-template-areas:"north north north" "west center east" "south south south";gap:.35rem;align-items:center;min-height:340px}
+.compass-seat{display:flex;justify-content:center;align-items:center;min-width:0;min-height:48px}
+.compass-seat.north{grid-area:north}
+.compass-seat.west{grid-area:west}
+.compass-seat.east{grid-area:east}
+.compass-seat.south{grid-area:south}
+.compass-seat .opp{max-width:100%;overflow-wrap:anywhere}
+.compass-seat.west .opp,.compass-seat.east .opp{min-width:0;width:100%;padding:.45rem .35rem}
+.compass-seat.south .opps{margin:0}
+.center{grid-area:center;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin:.3rem 0}
+#info{min-width:140px;text-align:center}
+#pot{color:var(--gold);font-weight:700}
+#msg{min-height:2.6em;font-size:.9rem;margin-top:.3rem}
+.hand{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
+.card{width:var(--cw);aspect-ratio:2/3;background:var(--paper);color:var(--wine);border-radius:8px;position:relative;display:grid;place-items:center;font-weight:700;box-shadow:0 2px 6px #0007;user-select:none}
+.card .n{position:absolute;font-size:calc(var(--cw)*.22);line-height:1}
+.card .top-n{top:4px;left:6px}
+.card .bottom-n{bottom:4px;right:6px;transform:rotate(180deg)}
+.card .s{font-size:calc(var(--cw)*.55);line-height:1}
+.card.whot .s{font:italic 700 calc(var(--cw)*.3) Georgia,serif}
+.card.back{background:var(--wine);color:var(--gold);border:2px solid var(--gold);font:italic 700 calc(var(--cw)*.28) Georgia,serif;cursor:pointer}
+.hand .card.ok{cursor:pointer;transform:translateY(-8px);outline:2px solid var(--gold)}
+.hand .card.selected{transform:translateY(-14px);outline:3px solid #fff;box-shadow:0 0 0 4px var(--gold),0 5px 16px #0009}
+.hand .card:not(.ok){opacity:.55}
+.callout{position:absolute;bottom:3px;right:5px;font-size:calc(var(--cw)*.22)}
+dialog{border:0;border-radius:12px;background:var(--wine);color:var(--paper);padding:1.4rem;max-width:min(92vw,460px);width:100%;max-height:calc(100vh - 24px);overflow-y:auto}
+dialog::backdrop{background:#000a}
+dialog h2{margin:0 0 .6rem;font:700 1.4rem Georgia,serif}
+dialog label{margin:.8rem 0}
+#suitBtns{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+#suitBtns button{font-size:1.6rem;padding:.4rem .9rem}
+.row{display:flex;gap:.6rem;margin-top:1rem}
+.full-width{width:100%;margin-top:.7rem}
+.score-breakdown{max-height:38vh;overflow:auto;margin:.8rem 0;border-top:1px solid #fff4;padding-top:.6rem;font-size:.82rem}
+.score-player{padding:.55rem 0;border-bottom:1px solid #fff2}
+.score-player h3{font-size:.9rem;margin:0 0 .35rem;color:var(--gold)}
+.score-line{display:flex;justify-content:space-between;gap:.8rem;padding:.12rem 0}
+.score-line span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.score-total{display:flex;justify-content:space-between;gap:.8rem;padding-top:.35rem;margin-top:.25rem;border-top:1px solid #fff3;font-weight:800}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .15s}}
+@media(max-width:600px){#board{grid-template-columns:minmax(56px,.7fr) minmax(170px,2.3fr) minmax(56px,.7fr);grid-template-rows:minmax(48px,auto) minmax(190px,1fr) minmax(48px,auto);gap:.2rem}.compass-seat.west .opp,.compass-seat.east .opp{font-size:.7rem}.compass-seat.west .last-card,.compass-seat.east .last-card{font-size:.6rem}}
+@keyframes deal{from{opacity:0;transform:translate(0,-160px) rotate(-12deg) scale(.6)}to{opacity:1;transform:none}}
+@keyframes land{from{transform:translateY(-70px) rotate(-14deg) scale(1.2);opacity:.2}to{transform:none;opacity:1}}
+@keyframes pulse{50%{box-shadow:0 0 0 6px #e3b23c55}}
+@keyframes last-pop{from{transform:scale(.65);opacity:.2}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:no-preference){#hand.dealing .card{animation:deal .45s both;animation-delay:calc(var(--i)*80ms)}.card.land{animation:land .3s ease-out}.opp.turn{animation:pulse 1.4s infinite}}
+#roomBar{display:flex;gap:.6rem;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.err{color:#ff9d9d;min-height:1.2em;font-size:.85rem;margin:0}
+hr{border:0;border-top:1px solid #fff3;margin:.5rem 0;width:100%}
+#who{font-size:.85rem;opacity:.85}
+.guest .chips,.guest .unit,.guest #btnBuy,.guest #btnCash{display:none}
+#voiceBar{display:flex;justify-content:center;margin-bottom:.8rem}
+#toast{position:fixed;left:50%;bottom:calc(1rem + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--wine);border:1px solid var(--gold);padding:.7rem 1rem;border-radius:10px;z-index:20;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;max-width:92vw}
+.frow{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin:.3rem 0;font-size:.9rem}
+#friendsPanel{display:grid;gap:.6rem}
+.guest #friendsPanel{display:none}
+.tracker-panel{margin:1rem 0;padding:.7rem;border-radius:10px;background:#fff1}
+.tracker-panel h2{font:700 1rem Georgia,serif;margin:0 0 .5rem}
+.track-row{display:flex;flex-wrap:wrap;gap:.25rem;align-items:center;margin:.25rem 0;font-size:.8rem}
+.track-n{min-width:1.6rem;text-align:center;padding:.1rem .25rem;border-radius:4px;border:1px solid #fff3;opacity:.4}
+.track-n.played{opacity:1;background:var(--gold);color:var(--ink);font-weight:700}
+.end-friends{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+
+/* ---------- Naija straw-mat theme ---------- */
+:root{--straw:#c9a45c;--straw-dark:#8a6428;--straw-light:#e6cd8f}
+html{background:var(--straw)}
+body{background:transparent}
+/* woven raffia floor mat, fixed behind everything (pure CSS: works offline, loads instantly) */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:var(--straw);
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 170px,#8c1c1c 170px 178px,#1f5a34 178px 184px,#1b1b1b 184px 188px,#8c1c1c 188px 196px,transparent 196px 400px),
+    repeating-linear-gradient(0deg,rgba(70,40,5,.30) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(90deg,rgba(255,236,170,.25) 0 5px,rgba(90,55,10,.18) 5px 10px),
+    repeating-linear-gradient(45deg,rgba(255,240,190,.10) 0 4px,rgba(100,60,15,.10) 4px 8px),
+    radial-gradient(ellipse at center,transparent 45%,rgba(60,30,0,.45) 100%)}
+.bar{border-bottom:6px solid var(--gold);box-shadow:0 4px 14px #0006}
+.panel{background:rgba(74,13,20,.94);padding:1.4rem;border-radius:14px;border:3px double var(--gold);box-shadow:0 8px 24px #0008}
+.tagline{margin:-.4rem 0 0;font:italic 1rem Georgia,serif;color:var(--straw-light)}
+.online-cta{font-size:1.2rem;padding:1rem;box-shadow:0 0 0 3px #26070b,0 0 0 5px var(--gold)}
+dialog{border:2px solid var(--gold)}
+/* the game table = a richer mat laid on the floor */
+#board{padding:.8rem;border-radius:16px;border:10px solid #5a3510;outline:3px solid var(--gold);outline-offset:-6px;background-color:#b98a45;
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 60px,#8c1c1c 60px 64px,#1f5a34 64px 67px,transparent 67px 140px),
+    repeating-linear-gradient(0deg,rgba(70,40,5,.35) 0 2px,transparent 2px 8px),
+    repeating-linear-gradient(90deg,rgba(255,236,170,.28) 0 4px,rgba(90,55,10,.2) 4px 8px),
+    radial-gradient(ellipse at center,rgba(255,230,150,.25),rgba(40,20,0,.35));
+  box-shadow:inset 0 0 40px #0006,0 10px 30px #0009}
+/* text sitting on the mat needs a dark cloth behind it */
+.opp{background:rgba(38,7,11,.88);border:1px solid var(--gold)}
+#info{background:rgba(38,7,11,.82);padding:.5rem .8rem;border-radius:10px}
+.draw-count{background:rgba(38,7,11,.85);padding:.15rem .5rem;border-radius:6px}
+.tracker-panel,#roomBar{background:rgba(38,7,11,.9);padding:.5rem;border-radius:10px}
+.hand{padding:.7rem;background:rgba(38,7,11,.6);border-radius:12px}
+.hand:empty{display:none}
+.card{box-shadow:0 4px 8px #0009}
+#voiceBar button{background:rgba(38,7,11,.9)}

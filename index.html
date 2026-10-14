@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#4a0d14">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Whot Table</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-required">
+<header class="bar">
+  <h1>Whot Table</h1>
+  <div class="wallet"><span id="who"></span><button id="btnMute" class="ghost" aria-label="Toggle sound">🔊</button>
+    <button id="btnAccount" class="ghost hidden">Account</button>
+    <span class="chips" id="bal">0</span><span class="unit">chips</span>
+    <button id="btnBuy">Buy</button>
+    <button id="btnCash" class="ghost">Withdraw</button><button id="btnOut" class="ghost">Log out</button>
+  </div>
+</header>
+
+<main>
+  <section id="lobby" class="panel">
+    <h2>Play Whot</h2>
+    <p class="tagline">Pull up a mat. The game is on.</p>
+    <button id="btnPlayOnline" class="primary online-cta">🌍 Play Online</button>
+    <p class="note" id="onlineStatus" aria-live="polite">Sit down with real players. Uses the stake and table size set below.</p>
+    <label>Computer opponents (practice)
+      <select id="opps"><option value="1">1 player</option><option value="2">2 players</option><option value="3">3 players</option></select>
+    </label>
+    <label>Stake for online tables (chips)
+      <input id="stake" type="number" min="200" step="50" value="200">
+    </label>
+    <p class="note">Computer games are free practice and work without internet. The stake applies to online tables only.</p>
+    <button id="btnDeal" class="primary">Practice vs computer</button>
+    <hr>
+    <h2>Private table</h2>
+    <div class="row"><button id="mpCreate">Create table</button><input id="mpCode" placeholder="Code" maxlength="4" aria-label="Table code"><button id="mpJoin" class="ghost">Join</button></div>
+    <p class="note" id="mpNote">Private tables: share the code or invite a friend. The stake comes from the field above.</p>
+    <p class="note" id="payout"></p>
+    <h2>Play online (public lobbies)</h2>
+    <label>Players in table
+      <select id="publicSize"><option value="2">2 players</option><option value="3">3 players</option><option value="4">4 players</option></select>
+    </label>
+    <div class="row"><button id="mpQuick" class="primary">Find public game</button><button id="mpBrowse" class="ghost">Refresh lobbies</button></div>
+    <div id="publicLobbies" aria-live="polite"></div>
+    <p class="note" id="publicNote">Join a public table with other active players, or wait in a table for your selected player count.</p>
+    <button id="trackerBuy" class="ghost">Unlock online deck tracker · 500 chips</button>
+    <p class="note" id="trackerNote">One-time in-game unlock. This is not a cash payment.</p>
+    <hr>
+    <div id="friendsPanel">
+      <h2>Friends</h2>
+      <div class="row"><input id="frName" placeholder="Search username" aria-label="Search username" maxlength="16"><button id="frSearch">Search</button></div>
+      <div id="frSearchResults"></div>
+      <div id="frReq"></div>
+      <div id="frList"></div>
+    </div>
+  </section>
+
+  <section id="table" class="hidden">
+    <div id="voiceBar" class="hidden"><button id="btnMic" class="ghost">🎤 Mic off</button></div>
+    <div id="roomBar" class="hidden"><span id="roomCode"></span><button id="mpStart">Start game</button><button id="mpLeave" class="ghost">Leave</button><span id="inviteList"></span></div>
+    <div id="board">
+      <div id="seatNorth" class="compass-seat north"></div>
+      <div id="seatWest" class="compass-seat west"></div>
+      <div class="center">
+      <div class="draw-area"><div id="drawCount" class="draw-count" aria-live="polite">0 cards left</div><div id="drawPile" class="card back" title="Draw a card" tabindex="0" role="button">Whot</div></div>
+      <div id="playPile"></div>
+      <div id="info"><div id="turnTimer" aria-live="polite"></div><div id="pot"></div><div id="msg"></div></div>
+      </div>
+      <div id="seatEast" class="compass-seat east"></div>
+      <div id="seatSouth" class="compass-seat south"><div id="opponents" class="opps"></div></div>
+    </div>
+    <section id="trackerPanel" class="tracker-panel hidden"><h2>Played cards</h2><div id="trackerContent"></div></section>
+    <div id="hand" class="hand"></div>
+  </section>
+</main>
+
+<dialog id="suitDlg"><p>Call a shape</p><div id="suitBtns"></div></dialog>
+<dialog id="endDlg"><h2 id="endTitle"></h2><p id="endText"></p><div id="endBreakdown" class="score-breakdown hidden" aria-label="Card score breakdown"></div><div id="endFriends" class="end-friends"></div><button id="btnAgain" class="primary">Back to lobby</button></dialog>
+
+<dialog id="payDlg">
+  <h2 id="payTitle"></h2>
+  <label>Amount (&#8358;) <input id="payAmt" type="number" min="100" step="100" value="1000"></label>
+  <label id="bankRow" class="hidden">Nigerian bank
+    <select id="bank"><option value="">Select a bank</option><option>Access Bank</option><option>Citibank Nigeria</option><option>Ecobank Nigeria</option><option>Fidelity Bank</option><option>First Bank of Nigeria</option><option>First City Monument Bank</option><option>Globus Bank</option><option>Guaranty Trust Bank</option><option>Heritage Bank</option><option>Jaiz Bank</option><option>Keystone Bank</option><option>Kuda Microfinance Bank</option><option>Lotus Bank</option><option>Moniepoint Microfinance Bank</option><option>Opay Digital Services</option><option>Parallex Bank</option><option>Polaris Bank</option><option>Premium Trust Bank</option><option>Providus Bank</option><option>Stanbic IBTC Bank</option><option>Standard Chartered Bank Nigeria</option><option>Sterling Bank</option><option>SunTrust Bank</option><option>TAJBank</option><option>Titan Trust Bank</option><option>Union Bank of Nigeria</option><option>United Bank for Africa</option><option>Unity Bank</option><option>Wema Bank</option><option>Zenith Bank</option></select>
+  </label>
+  <label id="acctRow" class="hidden">Account number <input id="acct" inputmode="numeric" maxlength="10"></label>
+  <p class="note" id="payNote"></p>
+  <div class="row"><button id="payGo" class="primary">Continue</button><button id="payX" class="ghost">Cancel</button></div>
+</dialog>
+
+<dialog id="ageDlg" open>
+  <h2>18+ only</h2>
+  <p>Betting involves real financial risk. Only play with money you can afford to lose. Confirm you are 18 or older to continue.</p>
+  <div class="row"><button id="ageYes" class="primary">I am 18 or older</button><button id="ageNo" class="ghost">Leave</button></div>
+</dialog>
+
+<dialog id="authDlg">
+  <h2>Sign in to play</h2>
+  <p class="note">New accounts get 200 chips. Verify one recovery email or phone to get 50 more.</p>
+  <label>Username <input id="uName" autocomplete="username" maxlength="16"></label>
+  <label>Password <input id="uPass" type="password" autocomplete="current-password"></label>
+  <label class="check-row"><input id="showPassword" type="checkbox">Show password</label>
+  <p class="err" id="authErr" role="alert"></p>
+  <div class="row"><button id="uLogin" class="primary">Log in</button><button id="uReg" class="ghost">Create account</button></div>
+  <button id="uRecover" class="ghost full-width">Forgot password?</button>
+  <button id="uGuest" class="ghost" style="margin-top:.8rem;width:100%">Play offline without an account</button>
+</dialog>
+
+<dialog id="accountDlg">
+  <h2>Account recovery</h2>
+  <p class="note" id="accountCurrent"></p>
+  <label>Recovery method
+    <select id="contactType"><option value="email">Email</option><option value="phone">Phone</option></select>
+  </label>
+  <label id="contactLabel">Email address <input id="contactValue" type="email" autocomplete="email" maxlength="254"></label>
+  <button id="contactSend" class="primary full-width">Send verification code</button>
+  <label id="contactCodeRow" class="hidden">Verification code <input id="contactCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
+  <p class="note" id="contactMsg" role="status"></p>
+  <div class="row"><button id="contactVerify" class="primary hidden">Verify and claim 50 chips</button><button id="accountClose" class="ghost">Close</button></div>
+</dialog>
+
+<dialog id="recoverDlg">
+  <h2>Recover account</h2>
+  <p class="note">Enter the verified email or phone on your account. If it matches, we’ll send a reset code.</p>
+  <label>Recovery method
+    <select id="recoverType"><option value="email">Email</option><option value="phone">Phone</option></select>
+  </label>
+  <label id="recoverContactLabel">Email address <input id="recoverContact" type="email" autocomplete="email" maxlength="254"></label>
+  <button id="recoverSend" class="primary full-width">Send recovery code</button>
+  <div id="recoverResetFields" class="hidden">
+    <label>Verification code <input id="recoverCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
+    <label>New password <input id="recoverPassword" type="password" autocomplete="new-password" minlength="8"></label>
+    <label class="check-row"><input id="showRecoverPassword" type="checkbox">Show password</label>
+    <button id="recoverSubmit" class="primary full-width">Reset password</button>
+  </div>
+  <p class="note" id="recoverMsg" role="status"></p>
+  <button id="recoverClose" class="ghost full-width">Back to sign in</button>
+</dialog>
+
+<div id="toast" class="hidden" role="status"></div>
+
+<script src="app.js"></script>
+<script src="extras.js"></script>
+<script src="mp.js"></script>
+<script src="social.js"></script>
+<script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+</body>
+</html>

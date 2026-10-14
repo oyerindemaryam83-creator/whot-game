@@ -1,0 +1,23 @@
+{
+  "name": "temis-whot-games",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run check",
+    "start": "node server.js",
+    "dev": "node --env-file=key.env server.js",
+    "check": "node --check server.js && node --check app.js && node --check extras.js && node --check mp.js && node --check social.js && node --check sw.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "nodemailer": "^10.1.0",
+    "ws": "^8.22.0"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
